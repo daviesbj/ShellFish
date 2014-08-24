@@ -1,0 +1,47 @@
+Fishery Incident Explorer
+=========================
+
+Integrating economic and weather data
+
+author: Brian James Davies
+
+date: 24 August 2014
+
+A Shiny web-app for integrating and browsing US fishery landings data and natural disaster data
+
+Why look at US fishery data?
+============================
+
+- Economically and culturally important in coastal states
+- Stressed system -- overfished, subject to high-impact natural and man-made incidents
+- Frequently in the news (Hurricanes Andrew & Katrina, Deepwater Horizon etc.)
+- Strong public interest in sustainability/environment
+- Good historical dataset available
+
+Where did the data come from?
+=============================
+
+- Fishery data originally from http://www.st.nmfs.noaa.gov/commercial-fisheries/commercial-landings/monthly-landings/index
+- Hurricane data from http://www.aoml.noaa.gov/hrd/hurdat/All_U.S._Hurricanes.html
+- You can download my saved copies as follows:
+```{r download_raw_data, cache = TRUE, eval = FALSE }
+download.file( url = 'https://s3.amazonaws.com/daviesbjCoursera/landings.csv', destfile = 'landings.csv' )
+landings <- read.csv( 'landings.csv', header=TRUE )
+download.file( url = 'https://s3.amazonaws.com/daviesbjCoursera/Hurricanes.csv', destfile = 'Hurricanes.csv' )
+hurri <- read.csv( 'Hurricanes.csv', header=TRUE )
+```
+
+How did I process it?
+=====================
+
+Used __merge()__ to create a single dataframe
+
+Use __ggplot2__ to generate the slides
+
+What does the output look like?
+===============================
+
+Go here and look!
+
+http://daviesbj.shinyapps.io/FisheryIncidentExplorer/
+
