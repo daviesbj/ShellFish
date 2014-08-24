@@ -1,0 +1,52 @@
+---
+title: "ProjectLog"
+author: "Brian Davies"
+date: "18 August 2014"
+output: html_document
+---
+
+# Getting the data
+
+It comes from http://www.st.nmfs.noaa.gov/commercial-fisheries/commercial-landings/monthly-landings/index
+
+I'm downloading by hand (due to pressure of time)
+
+I was able to select __ALL SPECIES INDIVIDUALLY__ and geographical area
+__Atlantic and Gulf By State__
+
+Now I have a file called __MF_MONTHLY_LANDINGS.RESULTS__ which is basically a CSV
+with slightly mangled headings. I edited those by hand to get __landings.csv__
+
+```{r load and clean up landings.csv, cache = TRUE}
+landings <- read.csv( 'landings.csv', header=TRUE,  colClasses =
+  c( 'character', 'character', 'factor', 'factor', 'character', 'character', 'character' ) )
+landings$date <- as.Date( paste0( '01-', landings$month, '-', landings$year ), format = '%d-%b-%Y' )
+landings$year <- as.numeric(landings$year)
+landings$month <- as.numeric(as.character(landings$date,'%m'))
+landings$tons <- as.numeric( gsub( ',', '', landings$tons, fixed=TRUE ))
+landings$pounds <- as.numeric( gsub( ',', '', landings$pounds, fixed=TRUE ))
+landings$dollars <- as.numeric( gsub( ',', '', landings$dollars, fixed=TRUE ))
+land <- data.frame(
+  date = landings$date,
+  month = landings$month,
+  year = landings$year,
+  state = landings$state,
+  species = landings$species,
+  tons = landings$tons,
+  pounds = landings$pounds,
+  dollars = landings$dollars
+  )
+rm(landings)
+```
+
+```{r generate a plot for species and state}
+plotData <- land[ (land$species=='OYSTER, EUROPEAN FLAT')&(land$state=='Louisiana'), ]
+p <- ggplot(plotData, aes( date, tons ) )
+p <- p + geom_line();
+p<-p + xlim( as.Date( c( '1990-01-01', '2012-12-01' ) ) )
+p<-p+scale_x_date( breaks = as.Date( paste0( as.character( seq(1990,2013 ) ),
+                                             '-01-01' ) ),
+                   labels = as.character( seq( 1990, 2013 ) ) )
+
+```
+
