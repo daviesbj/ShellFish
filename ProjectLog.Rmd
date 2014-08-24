@@ -50,3 +50,15 @@ p<-p+scale_x_date( breaks = as.Date( paste0( as.character( seq(1990,2013 ) ),
 
 ```
 
+Also got a hurricane list http://www.aoml.noaa.gov/hrd/hurdat/All_U.S._Hurricanes.html
+
+```{r read hurricane data}
+hurri <- read.csv( 'Hurricanes.csv' )
+hurri$date <- as.Date( paste0( '01-', hurri$month, '-', hurri$year ), format = '%d-%b-%Y' )
+hurri$year <- as.numeric(hurri$year)
+landings$month <- as.numeric(as.character(landings$date,'%m'))
+hurri$year <- factor(hurri$year)
+land$year <- factor(land$year)
+land$month <- factor(land$month)
+hland <- merge( land, hurri, by = c( 'year', 'month', 'state' ) )
+```
